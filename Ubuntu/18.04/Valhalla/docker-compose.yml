@@ -1,0 +1,11 @@
+version: '3.0'
+services:
+  valhalla:
+     build:
+       context: .
+       dockerfile: Dockerfile
+       args:
+         tile_url: https://download.geofabrik.de/europe/albania-latest.osm.pbf
+         cpu: 1
+     ports:
+       - "8002:8002"
