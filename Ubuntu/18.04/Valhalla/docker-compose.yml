@@ -6,5 +6,10 @@ services:
        dockerfile: Dockerfile
        args:
          tile_url: https://download.geofabrik.de/europe/albania-latest.osm.pbf
+         # Get correct bounding box from e.g. https://boundingbox.klokantech.com/
+         min_x: 0 # 18 # -> Albania | -180 -> World
+         min_y: 0 # 38 # -> Albania | -90  -> World
+         max_x: 0 # 22 # -> Albania |  180 -> World
+         max_y: 0 # 43 # -> Albania |  90  -> World
      ports:
        - "8002:8002"

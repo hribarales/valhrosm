@@ -1,9 +1,6 @@
 FROM ubuntu:18.04
 MAINTAINER Julian Psotta <julian@gis-ops.com>
 
-# Set standard args
-ARG tile_url
-
 # Set docker specific settings
 ENV TERM xterm
 RUN export DEBIAN_FRONTEND=noninteractive
@@ -25,7 +22,7 @@ ENV LC_ALL en_US.UTF-8
 RUN apt-get install -y cmake build-essential autoconf pkg-config
 
 # Standard ubuntu tools
-RUN apt-get install -y wget curl ca-certificates gnupg2 git
+RUN apt-get install -y wget curl ca-certificates gnupg2 git parallel
 
 # Prime server deps
 # libcurl4 and libcurl4-openssl-dev are installed in the prime server script directly to avoid path problems.
@@ -63,9 +60,18 @@ RUN cp -r /foo/valhalla/scripts/.  /scripts
 COPY configure_valhalla.sh ${SCRIPTS_DIR}
 COPY run.sh ${SCRIPTS_DIR}
 
+# Set link to osm file
+ARG tile_url
+
+# Set elevation boundary after the whole building crap else it will always build again when the coords change
+ARG min_x
+ARG min_y
+ARG max_x
+ARG max_y
+
 # configure Valhalla
 WORKDIR /${SCRIPTS_DIR}
-RUN /bin/bash configure_valhalla.sh ${SCRIPTS_DIR} ${CONFIG_PATH} ${tile_url}
+RUN /bin/bash configure_valhalla.sh ${SCRIPTS_DIR} ${CONFIG_PATH} ${tile_url} ${min_x} ${max_x} ${min_y} ${max_y}
 
 # Cleaning process
 WORKDIR /
