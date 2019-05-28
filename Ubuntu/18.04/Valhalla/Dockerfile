@@ -51,17 +51,9 @@ RUN /bin/bash build_prime_server.sh
 # Build Valhalla
 RUN /bin/bash build_valhalla.sh
 
-# Export path variables
-ENV SCRIPTS_DIR ${SCRIPTS_DIR:-"/scripts"}
-ENV CONFIG_PATH ${CONFIG_PATH:-"/conf/valhalla.json"}
-
-# Copy the configure scripts
-RUN cp -r /foo/valhalla/scripts/.  /scripts
-COPY configure_valhalla.sh ${SCRIPTS_DIR}
-COPY run.sh ${SCRIPTS_DIR}
-
 # Set link to osm file
 ARG tile_url
+ARG tile_file
 
 # Set elevation boundary after the whole building crap else it will always build again when the coords change
 ARG min_x
@@ -69,9 +61,22 @@ ARG min_y
 ARG max_x
 ARG max_y
 
+# Export path variables
+ENV SCRIPTS_DIR ${SCRIPTS_DIR:-"/scripts/"}
+ENV CONFIG_PATH ${CONFIG_PATH:-"/conf/valhalla.json"}
+
+# Copy the configure scripts
+RUN cp -r /foo/valhalla/scripts/.  /scripts
+COPY configure_valhalla.sh ${SCRIPTS_DIR}
+COPY run.sh ${SCRIPTS_DIR}
+
+# Copy the tile file if it exists
+COPY blank ${tile_file}* ${SCRIPTS_DIR}
+
+
 # configure Valhalla
 WORKDIR /${SCRIPTS_DIR}
-RUN /bin/bash configure_valhalla.sh ${SCRIPTS_DIR} ${CONFIG_PATH} ${tile_url} ${min_x} ${max_x} ${min_y} ${max_y}
+RUN /bin/bash configure_valhalla.sh ${SCRIPTS_DIR} ${CONFIG_PATH} ${tile_url} ${tile_file} ${min_x} ${max_x} ${min_y} ${max_y}
 
 # Cleaning process
 WORKDIR /

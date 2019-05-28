@@ -3,19 +3,32 @@
 cd $1
 # Create the tiles folder
 mkdir -p valhalla_tiles
-# Get the osm extract
-curl -O $3
-# Assign the file name of the osm extract for later used
-tile_file=$(ls -t | head -n1)
+
+# Check if the local extract exists or else download from an external URL
+if [[ -f "$4" ]]; then
+    echo "$4 exists. Using it as the OSM extract"
+     # Assign the file name of the osm extract for later used
+    tile_file=$4
+elif curl --output /dev/null --silent --head --fail "$3"; then
+  echo "Local OSM extract $4 not found. Using the given URL instead."
+  echo "URL exists: $3"
+  echo "Downloading OSM extract"
+  curl -O $3
+  # Assign the file name of the osm extract for later use
+  tile_file=$(ls -t | head -n1)
+else
+    echo "Please ensure that the tile_file or tile_url are valid"
+    exit 1
+fi
 # Check for bounding box
-if [[ "$4" != 0 ]] && [[ "$5" != 0 ]] && [[ "$6" != 0 ]] && [[ "$7" != 0 ]]; then
-    echo "Adding elevation";
+if [[ "$5" != 0 ]] && [[ "$6" != 0 ]] && [[ "$7" != 0 ]] && [[ "$8" != 0 ]]; then
+    echo "Valid bounding box added. Adding elevation!";
     # Build the elevation data
-    valhalla_build_elevation $4 $5 $6 $7 ${PWD}/elevation_tiles;
+    valhalla_build_elevation $5 $6 $7 $8 ${PWD}/elevation_tiles;
     # Build the config file with elevation
     valhalla_build_config --mjolnir-tile-dir ${PWD}/valhalla_tiles --mjolnir-tile-extract ${PWD}/valhalla_tiles.tar --mjolnir-timezone ${PWD}/valhalla_tiles/timezones.sqlite --mjolnir-admin ${PWD}/valhalla_tiles/admins.sqlite --additional-data-elevation ${PWD}/elevation_tiles > $2;
 else 
-    echo "Skipping elevation";
+    echo "No valid bounding box set. Skipping elevation!";
     # Build the config file without elevation
     valhalla_build_config --mjolnir-tile-dir ${PWD}/valhalla_tiles --mjolnir-tile-extract ${PWD}/valhalla_tiles.tar --mjolnir-timezone ${PWD}/valhalla_tiles/timezones.sqlite --mjolnir-admin ${PWD}/valhalla_tiles/admins.sqlite > $2;
 fi
