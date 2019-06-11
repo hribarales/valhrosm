@@ -8,6 +8,7 @@ services:
         # The tile_file must be located in the Dockerfile folder.
         # The tile_file has priority and is used when valid.
         # If the tile_file doesn't exist, the url is used instead.
+        # Don't blank out tile_url when you use tile_file and vice versa.
         tile_file: albania-latest.osm.pbf
         tile_url: https://download.geofabrik.de/europe/albania-latest.osm.pbf
         # Get correct bounding box from e.g. https://boundingbox.klokantech.com/
