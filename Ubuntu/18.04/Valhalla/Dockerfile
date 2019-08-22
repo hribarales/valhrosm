@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM gisops/prime_server-nodejs:10.15.0
 MAINTAINER Julian Psotta <julian@gis-ops.com>
 
 # Set docker specific settings
@@ -40,13 +40,9 @@ RUN mkdir /conf
 RUN mkdir /scripts
 
 # Copy scripts
-COPY build_prime_server.sh /foo
 COPY build_valhalla.sh /foo
 
 WORKDIR /foo
-
-# Build Prime Server
-RUN /bin/bash build_prime_server.sh
 
 # Build Valhalla
 RUN /bin/bash build_valhalla.sh
