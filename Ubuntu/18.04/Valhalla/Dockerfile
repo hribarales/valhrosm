@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM gisops/prime_server-nodejs:0.6.4-10.15.0
 MAINTAINER Julian Psotta <julian@gis-ops.com>
 
 # Set docker specific settings
@@ -25,7 +25,6 @@ RUN apt-get install -y cmake build-essential autoconf pkg-config
 RUN apt-get install -y wget curl ca-certificates gnupg2 git parallel
 
 # Prime server deps
-# libcurl4 and libcurl4-openssl-dev are installed in the prime server script directly to avoid path problems.
 RUN apt-get install -y libczmq-dev libzmq5
 
 # Valhalla deps
@@ -40,13 +39,10 @@ RUN mkdir /conf
 RUN mkdir /scripts
 
 # Copy scripts
-COPY build_prime_server.sh /foo
 COPY build_valhalla.sh /foo
 
 WORKDIR /foo
 
-# Build Prime Server
-RUN /bin/bash build_prime_server.sh
 
 # Build Valhalla
 RUN /bin/bash build_valhalla.sh
