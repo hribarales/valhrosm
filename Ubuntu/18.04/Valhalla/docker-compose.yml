@@ -9,7 +9,7 @@ services:
         # The tile_file has priority and is used when valid.
         # If the tile_file doesn't exist, the url is used instead.
         # Don't blank out tile_url when you use tile_file and vice versa.
-        tile_file: albania-latest.osm.pbf
+        tile_file: localfile.pbf
         tile_url: https://download.geofabrik.de/europe/albania-latest.osm.pbf
         # Get correct bounding box from e.g. https://boundingbox.klokantech.com/
         min_x: 11 # 18 # -> Albania | -180 -> World
@@ -19,4 +19,5 @@ services:
     ports:
       - "8002:8002"
     volumes:
-      - "./valhalla_git:/foo/valhalla_git"
+      - ./conf/:/custom_conf/:ro
+
