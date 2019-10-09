@@ -19,6 +19,5 @@ services:
     ports:
       - "8002:8002"
     volumes:
-      - "./valhalla_git:/foo/valhalla_git"
-      - ./conf/valhalla.json:/conf/valhalla.json
+      - ./conf/:/custom_conf/:ro
 

@@ -64,7 +64,6 @@ ENV CONFIG_PATH ${CONFIG_PATH:-"/conf/valhalla.json"}
 # Copy the configure scripts
 RUN cp -r /foo/valhalla/scripts/.  /scripts
 COPY configure_valhalla.sh ${SCRIPTS_DIR}
-COPY run.sh ${SCRIPTS_DIR}
 
 # Copy the tile file if it exists
 COPY blank ${tile_file}* ${SCRIPTS_DIR}
@@ -81,5 +80,6 @@ RUN apt-get autoclean -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Expose and run Valhalla
 EXPOSE 8002
+COPY run.sh ${SCRIPTS_DIR}
 RUN chmod +x /scripts/run.sh
 ENTRYPOINT ["/scripts/run.sh", "/conf/valhalla.json"]
