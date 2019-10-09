@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
 
-#url="https://github.com/gis-ops/valhalla"
 url="https://github.com/valhalla/valhalla"
+NPROC=$(nproc)
 
-#NPROC=$(nproc)
-NPROC=2
 
 git clone $url
 cd valhalla
-#git checkout waynodes_to_128
 git submodule sync
 git submodule update --init --recursive
 curl -o- curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
@@ -31,8 +28,7 @@ cmake -H. -Bbuild \
   -DENABLE_PYTHON_BINDINGS=On \
   -DENABLE_NODE_BINDINGS=On \
   -DENABLE_SERVICES=On \
-  -DENABLE_HTTP=On \
-#  -DENABLE_LARGE_ID_SUPPORT=On
+  -DENABLE_HTTP=On
 cd build
 make -j$NPROC
 make -j$NPROC check
