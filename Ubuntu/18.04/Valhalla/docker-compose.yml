@@ -12,12 +12,15 @@ services:
         tile_file: localfile.pbf
         tile_url: https://download.geofabrik.de/europe/albania-latest.osm.pbf
         # Get correct bounding box from e.g. https://boundingbox.klokantech.com/
-        min_x: 11 # 18 # -> Albania | -180 -> World
-        min_y: 46 # 38 # -> Albania | -90  -> World
-        max_x: 14 # 22 # -> Albania |  180 -> World
-        max_y: 49 # 43 # -> Albania |  90  -> World
+        min_x: 18 # -> Albania | -180 -> World
+        min_y: 38 # -> Albania | -90  -> World
+        max_x: 22 # -> Albania |  180 -> World
+        max_y: 43 # -> Albania |  90  -> World
+        build_elevation: "False"
+        build_admins: "True"
+        build_time_zones: "False"
     ports:
       - "8002:8002"
-    volumes:
+    volumes:mkdir
       - ./conf/:/custom_conf/:ro
 

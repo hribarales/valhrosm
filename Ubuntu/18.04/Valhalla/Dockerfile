@@ -56,6 +56,9 @@ ARG min_x
 ARG min_y
 ARG max_x
 ARG max_y
+ARG build_admins
+ARG build_elevation
+ARG build_time_zones
 
 # Export path variables
 ENV SCRIPTS_DIR ${SCRIPTS_DIR:-"/scripts/"}
@@ -71,7 +74,7 @@ COPY blank ${tile_file}* ${SCRIPTS_DIR}
 
 # configure Valhalla
 WORKDIR /${SCRIPTS_DIR}
-RUN /bin/bash configure_valhalla.sh ${SCRIPTS_DIR} ${CONFIG_PATH} ${tile_url} ${tile_file} ${min_x} ${max_x} ${min_y} ${max_y}
+RUN /bin/bash configure_valhalla.sh ${SCRIPTS_DIR} ${CONFIG_PATH} ${tile_url} ${tile_file} ${min_x} ${max_x} ${min_y} ${max_y} ${build_elevation} ${build_admins} ${build_time_zones}
 
 # Cleaning process
 WORKDIR /
