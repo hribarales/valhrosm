@@ -16,9 +16,9 @@ services:
         min_y: 38 # -> Albania | -90  -> World
         max_x: 22 # -> Albania |  180 -> World
         max_y: 43 # -> Albania |  90  -> World
-        build_elevation: "False"
+        build_elevation: "True"
         build_admins: "True"
-        build_time_zones: "False"
+        build_time_zones: "True"
     ports:
       - "8002:8002"
     volumes:mkdir
