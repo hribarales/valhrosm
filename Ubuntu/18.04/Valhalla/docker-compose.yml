@@ -21,6 +21,6 @@ services:
         build_time_zones: "True"
     ports:
       - "8002:8002"
-    volumes:mkdir
+    volumes:
       - ./conf/:/custom_conf/:ro
 
