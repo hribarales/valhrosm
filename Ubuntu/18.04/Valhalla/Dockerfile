@@ -1,5 +1,5 @@
-FROM gisops/prime_server-nodejs:0.6.4-10.15.0
-MAINTAINER Julian Psotta <julian@gis-ops.com>
+FROM debian:latest
+MAINTAINER Aleš Hribar <ales.hribar@outlook.com>
 
 # Set docker specific settings
 ENV TERM xterm
@@ -21,7 +21,7 @@ ENV LC_ALL en_US.UTF-8
 # Build chain
 RUN apt-get install -y cmake build-essential autoconf pkg-config
 
-# Standard ubuntu tools
+# Standard debian tools
 RUN apt-get install -y wget curl ca-certificates gnupg2 git parallel
 
 # Prime server deps
@@ -34,14 +34,14 @@ RUN apt-get install -y spatialite-bin unzip libtool zlib1g-dev libsqlite3-mod-sp
 RUN ln -s /usr/lib/x86_64-linux-gnu/mod_spatialite.so /usr/lib/mod_spatialite
 
 # Create necessary folders
-RUN mkdir -p /foo
+RUN mkdir -p /valhrsrc
 RUN mkdir /conf
 RUN mkdir /scripts
 
 # Copy scripts
-COPY build_valhalla.sh /foo
+COPY build_valhalla.sh /valhrsrc
 
-WORKDIR /foo
+WORKDIR /valhrsrc
 
 
 # Build Valhalla
@@ -65,7 +65,7 @@ ENV SCRIPTS_DIR ${SCRIPTS_DIR:-"/scripts/"}
 ENV CONFIG_PATH ${CONFIG_PATH:-"/conf/valhalla.json"}
 
 # Copy the configure scripts
-RUN cp -r /foo/valhalla/scripts/.  /scripts
+RUN cp -r /valhrsrc/valhalla/scripts/.  /scripts
 COPY configure_valhalla.sh ${SCRIPTS_DIR}
 
 # Copy the tile file if it exists
@@ -78,7 +78,7 @@ RUN /bin/bash configure_valhalla.sh ${SCRIPTS_DIR} ${CONFIG_PATH} ${tile_url} ${
 
 # Cleaning process
 WORKDIR /
-RUN rm -rf /foo
+RUN rm -rf /valhrsrc
 RUN apt-get autoclean -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Expose and run Valhalla
