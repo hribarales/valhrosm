@@ -22,3 +22,8 @@ cmake . -Bbuild \
   -DENABLE_SERVICES=On \
   -DENABLE_HTTP=On
 
+
+cd build
+make -j$(nproc)
+make -j$(nproc) check
+make install
