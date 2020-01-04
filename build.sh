@@ -2,7 +2,6 @@
 
 url="https://github.com/valhalla/valhalla"
 NPROC=$(nproc)
-
 git clone $url
 cd valhalla
 npm i --save-dev node-cmake nan
@@ -21,7 +20,6 @@ cmake . -Bbuild \
   -DENABLE_NODE_BINDINGS=On \
   -DENABLE_SERVICES=On \
   -DENABLE_HTTP=On
-
 
 cd build
 make -j$(nproc)

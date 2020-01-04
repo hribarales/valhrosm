@@ -7,7 +7,7 @@ RUN echo "deb http://security.debian.org/ buster/updates main contrib non-free" 
 
 RUN apt-get update \
     && apt-get -y install git wget curl ca-certificates gnupg2\
-        cmake build-essential  libnode-dev npm clang \
+        cmake build-essential  libnode-dev npm clang spatialite-bin \
         libsqlite3-mod-spatialite libsqlite3-dev libspatialite-dev \
         autoconf libtool pkg-config libczmq-dev libzmq5 \
         libcurl4-openssl-dev zlib1g-dev jq libgeos-dev \
@@ -25,10 +25,44 @@ RUN apt-get update
 RUN apt install -y libprime-server0.6.5-0 libprime-server0.6.5-dev prime-server0.6.5-bin
 
 RUN mkdir -p /src/valhalla
+RUN mkdir /conf
+RUN mkdir /scripts
 COPY build.sh /src/valhalla
 WORKDIR /src/valhalla
 RUN /bin/bash build.sh
 
+ARG tile_url
+ARG tile_file
+
+ARG min_x
+ARG min_y
+ARG max_x
+ARG max_y
+ARG build_admins
+ARG build_elevation
+ARG build_time_zones
+
+ENV SCRIPTS_DIR ${SCRIPTS_DIR:-"/scripts/"}
+ENV CONFIG_PATH ${CONFIG_PATH:-"/conf/valhalla.json"}
+
+RUN cp -r /src/valhalla/valhalla/scripts/. /scripts
+COPY configure_valhalla.sh ${SCRIPTS_DIR}
+
+COPY blank ${tile_file}* ${SCRIPTS_DIR}
+
+
+WORKDIR /${SCRIPTS_DIR}
+RUN /bin/bash configure_valhalla.sh ${SCRIPTS_DIR} ${CONFIG_PATH} ${tile_url} ${tile_file} ${min_x} ${max_x} ${min_y} ${max_y} ${build_elevation} ${build_admins} ${build_time_zones}
+
+
+WORKDIR /
+RUN rm -rf /src/valhalla
+RUN apt-get autoclean -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+EXPOSE 8002
+COPY run.sh ${SCRIPTS_DIR}
+RUN chmod +x /scripts/run.sh
+ENTRYPOINT ["/scripts/run.sh", "/conf/valhalla.json"]
 
 # RUN apt-get update \
 #     && apt-get -y install \

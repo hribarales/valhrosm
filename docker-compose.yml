@@ -13,8 +13,8 @@ services:
         tile_url: https://download.geofabrik.de/europe/croatia-latest.osm.pbf
         # Get correct bounding box from e.g. https://boundingbox.klokantech.com/
         min_x: 13 # -> Croatia | -180 -> World
-        min_y: 42 # -> Croatia | -90  -> World
-        max_x: 20 # -> Croatia |  180 -> World
+        min_y: 38 # -> Croatia | -90  -> World
+        max_x: 22 # -> Croatia |  180 -> World
         max_y: 47 # -> Croatia |  90  -> World
         build_elevation: "True"
         build_admins: "True"
@@ -23,4 +23,3 @@ services:
       - "8002:8002"
     volumes:
       - ./conf/:/custom_conf/:ro
-
