@@ -1,6 +1,6 @@
 FROM debian:buster
 
-LABEL maintainer="hribarsela"
+LABEL maintainer="hribarales"
 LABEL version="1.0"
 
 RUN echo "deb http://security.debian.org/ buster/updates main contrib non-free" >> /etc/apt/sources.list
